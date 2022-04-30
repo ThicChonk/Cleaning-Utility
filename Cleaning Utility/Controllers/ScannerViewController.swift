@@ -3,21 +3,12 @@
 //  Cleaning Utility
 //
 //  Created by Aram Aprahamian on 4/29/22.
-//
+
 
 import UIKit
 import CoreBluetooth
 
-class ScannerViewController: UIViewController, BluetoothSerialDelegate {
-    
-    func serialDidChangeState() {
-        <#code#>
-    }
-    
-    func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        <#code#>
-    }
-    
+class ScannerViewController: UIViewController {
 
   // Data
   private var centralManager: CBCentralManager!
@@ -113,18 +104,18 @@ class ScannerViewController: UIViewController, BluetoothSerialDelegate {
 
   DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
     //Once connected, move to new view controller to manager incoming and outgoing data
-    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    //let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-    let detailViewController = storyboard.instantiateViewController(withIdentifier: "ConsoleViewController") as! ConsoleViewController
+    //let detailViewController = storyboard.instantiateViewController(withIdentifier: "ConsoleViewController") as! ConsoleViewController
 
-    self.navigationController?.pushViewController(detailViewController, animated: true)
+    //self.navigationController?.pushViewController(detailViewController, animated: true)
   })
 }
 }
 
 // MARK: - CBCentralManagerDelegate
 // A protocol that provides updates for the discovery and management of peripheral devices.
-extension ViewController: CBCentralManagerDelegate {
+extension ScannerViewController: CBCentralManagerDelegate {
 
   // MARK: - Check
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -190,7 +181,7 @@ extension ViewController: CBCentralManagerDelegate {
 
 // MARK: - CBPeripheralDelegate
 // A protocol that provides updates on the use of a peripheral’s services.
-extension ViewController: CBPeripheralDelegate {
+extension ScannerViewController: CBPeripheralDelegate {
 
   func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
 
@@ -283,7 +274,7 @@ func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor charac
 
 // MARK: - UITableViewDataSource
 // The methods adopted by the object you use to manage data and provide cells for a table view.
-extension ViewController: UITableViewDataSource {
+extension ScannerViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       return self.peripheralArray.count
@@ -313,7 +304,7 @@ extension ViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 // Methods for managing selections, deleting and reordering cells and performing other actions in a table view.
-extension ViewController: UITableViewDelegate {
+extension ScannerViewController: UITableViewDelegate {
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
@@ -325,5 +316,4 @@ extension ViewController: UITableViewDelegate {
 
   }
 }
-
 

@@ -140,7 +140,7 @@
                         <outlet property="progressBar" destination="CKu-8l-uMJ" id="e1S-eQ-A5f"/>
                         <outlet property="startCycleButton" destination="SME-5O-Nn7" id="Bu2-ch-ueR"/>
                         <outlet property="statusLabel" destination="iFk-t9-4us" id="vir-V3-2Lp"/>
-                        <segue destination="swl-tv-ZcR" kind="presentation" id="udA-UD-5Tb"/>
+                        <segue destination="swl-tv-ZcR" kind="presentation" identifier="goToDevices" id="udA-UD-5Tb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mdc-WQ-7PH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -150,8 +150,8 @@
         <!--Scanner View Controller-->
         <scene sceneID="1AR-8r-KJ7">
             <objects>
-                <viewController id="swl-tv-ZcR" customClass="ScannerViewController" customModule="Cleaning_Utility" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="DTL-BZ-IC3" userLabel="Connect View" customClass="ConnectViewController" customModule="Glasses_Cleaner_Utility" customModuleProvider="target">
+                <viewController id="swl-tv-ZcR" customClass="ScannerViewController" customModule="Cleaning_Utility" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DTL-BZ-IC3" userLabel="Connect View" customClass="ConnectViewController" customModule="Cleaning_Utility" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -188,7 +188,7 @@
                                 <rect key="frame" x="0.0" y="139.5" width="414" height="702.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" indentationWidth="10" reuseIdentifier="BlueCell" editingAccessoryType="disclosureIndicator" rowHeight="48" id="E1p-8B-aGF" customClass="TableViewCell" customModule="Glasses_Cleaner_Utility" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" indentationWidth="10" reuseIdentifier="BlueCell" editingAccessoryType="disclosureIndicator" rowHeight="48" id="E1p-8B-aGF" customClass="TableViewCell" customModule="Cleaning_Utility" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E1p-8B-aGF" id="l1h-Hc-coV">
