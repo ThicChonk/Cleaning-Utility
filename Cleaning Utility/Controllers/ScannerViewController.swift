@@ -74,19 +74,6 @@ class ScannerViewController: UIViewController {
         }
     }
     
-    func scanForBLEDevices() -> Void {
-        // Remove prior data
-        peripheralArray.removeAll()
-        rssiArray.removeAll()
-        // Start Scanning
-        centralManager?.scanForPeripherals(withServices: [] , options: [CBCentralManagerScanOptionAllowDuplicatesKey:true])
-        scanningLabel.text = "Scanning..."
-        
-        Timer.scheduledTimer(withTimeInterval: 15, repeats: false) {_ in
-            self.stopScanning()
-        }
-    }
-    
     func stopTimer() -> Void {
         // Stops Timer
         self.timer.invalidate()

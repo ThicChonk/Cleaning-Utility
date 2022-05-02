@@ -37,12 +37,15 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     //MARK: IBActions
     @IBAction func toggleButtonPressed(_ sender: UIButton) {
         //Starts the cleaning cycle
-        print("Pressed!")
+        
         if(serial.isReady) {
+            print("Serial is connected and sending message!")
             serial.sendMessageToDevice("1")
             print("Sent \"1\"")
+        } else {
+            print("Serial is not connected... cannot send message!")
         }
-            
+        
     }
     
     @IBAction func connectButtonToggled(_ sender: UIButton) {
@@ -65,19 +68,19 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         }
         
         switch serial.centralManager.state {
-            case .unknown:
-                print("unknown")
-            case .resetting:
-                print("resetting")
-            case .unsupported:
-                print("unsupported")
-            case .unauthorized:
-                print("unauthorized")
-            case .poweredOff:
-                print("powered off")
-            case .poweredOn:
-                print("powered on")
-            }
+        case .unknown:
+            print("unknown")
+        case .resetting:
+            print("resetting")
+        case .unsupported:
+            print("unsupported")
+        case .unauthorized:
+            print("unauthorized")
+        case .poweredOff:
+            print("powered off")
+        case .poweredOn:
+            print("powered on")
+        }
     }
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {

@@ -21,6 +21,7 @@
 		24B95E19281CEF4100F6985E /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B95E18281CEF4100F6985E /* ScannerViewController.swift */; };
 		24B95E1F281CF04600F6985E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24B95E1E281CF04600F6985E /* LaunchScreen.storyboard */; };
 		24B95E22281CF7B900F6985E /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B95E21281CF7B900F6985E /* TableViewCell.swift */; };
+		24B95E26282076EA00F6985E /* DeviceScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B95E25282076EA00F6985E /* DeviceScannerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		24B95E18281CEF4100F6985E /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		24B95E1E281CF04600F6985E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		24B95E21281CF7B900F6985E /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		24B95E25282076EA00F6985E /* DeviceScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceScannerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				24B95DE6281CEDA300F6985E /* ViewController.swift */,
 				24B95E21281CF7B900F6985E /* TableViewCell.swift */,
 				24B95E18281CEF4100F6985E /* ScannerViewController.swift */,
+				24B95E25282076EA00F6985E /* DeviceScannerViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 			files = (
 				24B95E19281CEF4100F6985E /* ScannerViewController.swift in Sources */,
 				24B95E22281CF7B900F6985E /* TableViewCell.swift in Sources */,
+				24B95E26282076EA00F6985E /* DeviceScannerViewController.swift in Sources */,
 				24B95DE7281CEDA300F6985E /* ViewController.swift in Sources */,
 				24B95DE3281CEDA300F6985E /* AppDelegate.swift in Sources */,
 				24B95E16281CEEFB00F6985E /* BlePeripheral.swift in Sources */,

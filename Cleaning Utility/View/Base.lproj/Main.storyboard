@@ -17,16 +17,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="pyq-k8-A57">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="422" height="818"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SqC-Mj-zm8" userLabel="Top View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="406.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="422" height="406.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Sla-vL-7eZ">
-                                                <rect key="frame" x="0.0" y="8" width="414" height="50"/>
+                                                <rect key="frame" x="0.0" y="8" width="422" height="50"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cleaner Utility" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E6K-By-jH4" userLabel="Title Label">
-                                                        <rect key="frame" x="77.5" y="0.0" width="259" height="50"/>
+                                                        <rect key="frame" x="81.5" y="0.0" width="259" height="50"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="M6M-gG-f90"/>
                                                         </constraints>
@@ -44,13 +44,13 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xi7-is-SZC" userLabel="Bottom View">
-                                        <rect key="frame" x="0.0" y="411.5" width="414" height="406.5"/>
+                                        <rect key="frame" x="0.0" y="411.5" width="422" height="406.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tGM-ik-anS">
-                                                <rect key="frame" x="30" y="348" width="354" height="50.5"/>
+                                                <rect key="frame" x="30" y="347" width="362" height="51.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SME-5O-Nn7">
-                                                        <rect key="frame" x="0.0" y="0.0" width="172" height="50.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="176" height="51.5"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="filled" title="Start Cycle"/>
                                                         <connections>
@@ -58,7 +58,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GlY-Cb-SYa">
-                                                        <rect key="frame" x="182" y="0.0" width="172" height="50.5"/>
+                                                        <rect key="frame" x="186" y="0.0" width="176" height="51.5"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="gray" title="Connect"/>
                                                         <connections>
@@ -71,7 +71,7 @@
                                                 </constraints>
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7J5-qd-d0y" userLabel="Status Bar">
-                                                <rect key="frame" x="30" y="267" width="362" height="66"/>
+                                                <rect key="frame" x="30" y="266" width="362" height="66"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connected To: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-Do-uxK">
                                                         <rect key="frame" x="0.0" y="0.0" width="131" height="24"/>
@@ -147,10 +147,10 @@
             </objects>
             <point key="canvasLocation" x="-514" y="300"/>
         </scene>
-        <!--Scanner View Controller-->
+        <!--Device Scanner View Controller-->
         <scene sceneID="1AR-8r-KJ7">
             <objects>
-                <viewController id="swl-tv-ZcR" customClass="ScannerViewController" customModule="Cleaning_Utility" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="swl-tv-ZcR" customClass="DeviceScannerViewController" customModule="Cleaning_Utility" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DTL-BZ-IC3" userLabel="Connect View" customClass="ConnectViewController" customModule="Cleaning_Utility" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
