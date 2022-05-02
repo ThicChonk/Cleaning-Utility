@@ -44,7 +44,7 @@ protocol BluetoothSerialDelegate {
     
     /// Called when a pending connection failed
     func serialDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?)
-
+    
     /// Called when a peripheral is ready for communication
     func serialIsReady(_ peripheral: CBPeripheral)
 }
@@ -77,7 +77,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     
     /// The connected peripheral (nil if none is connected)
     var connectedPeripheral: CBPeripheral?
-
+    
     /// The characteristic 0xFFE1 we need to write to, of the connectedPeripheral
     weak var writeCharacteristic: CBCharacteristic?
     
@@ -85,8 +85,8 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     var isReady: Bool {
         get {
             return centralManager.state == .poweredOn &&
-                   connectedPeripheral != nil &&
-                   writeCharacteristic != nil
+            connectedPeripheral != nil &&
+            writeCharacteristic != nil
         }
     }
     
@@ -201,7 +201,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         
         // send it to the delegate
         delegate.serialDidConnect(peripheral)
-
+        
         // Okay, the peripheral is connected but we're not ready yet!
         // First get the 0xFFE0 service
         // Then get the 0xFFE1 characteristic of this service
@@ -210,18 +210,18 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         // Only then we're ready for communication
         peripheral.discoverServices([serviceUUID])
     }
-
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
         pendingPeripheral = nil
-
+        
         // send it to the delegate
         delegate.serialDidDisconnect(peripheral, error: error as NSError?)
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         pendingPeripheral = nil
-
+        
         // just send it to the delegate
         delegate.serialDidFailToConnect(peripheral, error: error as NSError?)
     }
@@ -230,7 +230,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
         // note that "didDisconnectPeripheral" won't be called if BLE is turned off while connected
         connectedPeripheral = nil
         pendingPeripheral = nil
-
+        
         // send it to the delegate
         delegate.serialDidChangeState()
     }

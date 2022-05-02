@@ -23,18 +23,26 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("View Loaded")
         
         //init serial
         serial = BluetoothSerial(delegate: self)
         
         //UI
         progressBar.progress = 0;
+        
+        
     }
     
     //MARK: IBActions
     @IBAction func toggleButtonPressed(_ sender: UIButton) {
         //Starts the cleaning cycle
         print("Pressed!")
+        if(serial.isReady) {
+            serial.sendMessageToDevice("1")
+            print("Sent \"1\"")
+        }
+            
     }
     
     @IBAction func connectButtonToggled(_ sender: UIButton) {
@@ -55,6 +63,21 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
             connectionLabel.text = ""
             statusLabel.text = "Status: Bluetooth turned off"
         }
+        
+        switch serial.centralManager.state {
+            case .unknown:
+                print("unknown")
+            case .resetting:
+                print("resetting")
+            case .unsupported:
+                print("unsupported")
+            case .unauthorized:
+                print("unauthorized")
+            case .poweredOff:
+                print("powered off")
+            case .poweredOn:
+                print("powered on")
+            }
     }
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
@@ -64,6 +87,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     }
     
     func serialDidReceiveString(_ message: String) {
+        reloadUI()
         print(message)
     }
     
