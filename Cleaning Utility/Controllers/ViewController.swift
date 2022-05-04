@@ -30,7 +30,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("View Loaded")
-        
+        startCycleButton.tintColor = .systemBlue
         serial = BluetoothSerial(delegate: self)
         //UI
         progressBar.progress = 0;
@@ -151,11 +151,9 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         serial.delegate = self
         
         if(isRunning) {
-            startCycleButton.isPointerInteractionEnabled = false
             startCycleButton.tintColor = .systemGreen
         } else {
             status = "Idle"
-            startCycleButton.isPointerInteractionEnabled = true
             startCycleButton.tintColor = .systemBlue
         }
         
@@ -166,12 +164,14 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
             connectButton.setTitle("Disconnect", for: .normal)
         } else if serial.centralManager.state == .poweredOn {
             startCycleButton.tintColor = .systemGray
+            connectButton.tintColor = .systemBlue
             connectionLabel.text = ""
             status = "Not Connected"
             connectButton.setTitle("Connect", for: .normal)
         } else {
             startCycleButton.tintColor = .systemGray
             connectionLabel.text = ""
+            connectButton.tintColor = .systemBlue
             status = "Not Connected"
             connectButton.setTitle("Connect", for: .normal)
         }
