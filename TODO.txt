@@ -1,0 +1,6 @@
+TODO:
+* Add dropdown selector to choose from more cycles
+  - That or letting users select duration of cleaning
+
+* Add info page with group info and contact info
+* background animation while machine is working (maybe bubbles?)
