@@ -70,6 +70,16 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         reloadUI()
         if(!serial.isReady) {
             self.performSegue(withIdentifier: "goToDevices", sender: self)
+        } else if isRunning {
+            let alertVC = UIAlertController(title: "Cycle Running", message: "Glasses are currently in the process of cleaning", preferredStyle: UIAlertController.Style.alert)
+            
+            let action = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in self.dismiss(animated: true, completion: nil)
+                
+            })
+            
+            alertVC.addAction(action)
+            
+            self.present(alertVC, animated: true, completion: nil)
         } else {
             disconnectPeripheral()
         }
@@ -87,6 +97,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     func disconnectPeripheral() {
         print("Disconnect for peripheral.")
+        progress = 0.0
         serial.disconnect()
         reloadUI()
     }

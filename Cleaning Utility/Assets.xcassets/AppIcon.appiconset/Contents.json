@@ -51,7 +51,7 @@
       "size" : "57x57"
     },
     {
-      "filename" : "AppIcon60x60@2x.png",
+      "filename" : "AppIcon60x60@2x 2.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
@@ -92,11 +92,13 @@
       "size" : "40x40"
     },
     {
+      "filename" : "AppIcon76x76.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
+      "filename" : "AppIcon76x76@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
@@ -112,13 +114,13 @@
       "size" : "1024x1024"
     },
     {
-      "filename" : "iTunesArtwork.png",
+      "filename" : "iTunesArtwork 2.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "iTunesArtwork@2x.png",
+      "filename" : "iTunesArtwork@2x 2.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
@@ -155,21 +157,38 @@
     },
     {
       "filename" : "AppIcon72x72@2x.png",
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "2x",
-      "size" : "72x72"
+      "size" : "60x60",
+      "unassigned" : true
     },
     {
-      "filename" : "AppIcon76x76.png",
-      "idiom" : "universal",
-      "scale" : "1x",
-      "size" : "76x76"
+      "filename" : "AppIcon60x60@2x.png",
+      "idiom" : "mac",
+      "scale" : "2x",
+      "size" : "512x512",
+      "unassigned" : true
     },
     {
-      "filename" : "AppIcon76x76@2x.png",
-      "idiom" : "universal",
+      "filename" : "iTunesArtwork-1.png",
+      "idiom" : "mac",
       "scale" : "2x",
-      "size" : "76x76"
+      "size" : "512x512",
+      "unassigned" : true
+    },
+    {
+      "filename" : "iTunesArtwork@2x 3.png",
+      "idiom" : "mac",
+      "scale" : "2x",
+      "size" : "512x512",
+      "unassigned" : true
+    },
+    {
+      "filename" : "iTunesArtwork@2x.png",
+      "idiom" : "mac",
+      "scale" : "2x",
+      "size" : "512x512",
+      "unassigned" : true
     }
   ],
   "info" : {
