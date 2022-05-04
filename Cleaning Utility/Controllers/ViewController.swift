@@ -19,7 +19,9 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     
     //System variables
-    var progress: Float = 0
+    var progress: Float = 0.0
+    var isRunning: Bool = false
+    var status: String = "Idle"
     
     var peripheralManager: CBPeripheralManager?
     var peripheral: CBPeripheral?
@@ -45,8 +47,9 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     //MARK: IBActions
     @IBAction func toggleButtonPressed(_ sender: UIButton) {
-        //Starts the cleaning cycle
+        reloadUI()
         
+        //Starts the cleaning cycle
         if !serial.isReady {
             let alert = UIAlertController(title: "Not connected", message: "What am I supposed to send this to?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: { action -> Void in self.dismiss(animated: true, completion: nil) }))
@@ -55,18 +58,21 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
             print("Serial is connected and sending message!")
             serial.sendMessageToDevice("1")
             print("Sent \"1\"")
+            progress = 0.0
+            isRunning = true
         }
         
+        reloadUI()
     }
     
     @IBAction func connectButtonToggled(_ sender: UIButton) {
-        reloadUI()
-        
         if(!serial.isReady) {
             self.performSegue(withIdentifier: "goToDevices", sender: self)
         } else {
             disconnectPeripheral()
         }
+        
+        reloadUI()
     }
     
     func writeOutgoingValue(data: String){
@@ -90,9 +96,60 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         peripheral?.writeValue(outgoingData as Data, for: BlePeripheral.connectedTXChar!, type: CBCharacteristicWriteType.withResponse)
     }
     
+    
+    
+    //MARK: BluetoothSerialDelegate
+    
+    func serialDidReceiveString(_ message: String) {
+        reloadUI()
+        // add the received text to the textView, optionally with a line break at the end
+        print(message)
+        
+        let switchstate: Character = Array(message)[0]
+        
+        switch switchstate {
+        case "p":
+            let value = Float(message[1..<4])
+            progress = value!
+            
+            if(progress == 1.0) {
+                isRunning = false
+            } else {
+                isRunning = true
+            }
+            
+            break;
+        case "d":
+            progress = 1.0
+            isRunning = false
+        default:
+            print("Invalid command given")
+            progress = 0.0
+            isRunning = false
+        }
+        
+        reloadUI()
+    }
+    
+    func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
+        isRunning = false
+        reloadUI()
+    }
+    
+    func serialDidChangeState() {
+        reloadUI()
+    }
+    
+    //MARK: Reload UI
+    
     @objc func reloadUI() {
         progressBar.progress = progress
         serial.delegate = self
+        
+        if(isRunning) {
+            status = "Running"
+            startCycleButton.tintColor = .systemGreen
+        } else { status = "Idle" }
         
         if serial.isReady {
             connectionLabel.text = "Connected To: " + BlePeripheral.connectedPeripheral!.name!
@@ -111,21 +168,34 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
             statusLabel.text = "Not Connected"
             connectButton.setTitle("Connect", for: .normal)
         }
+        
+        statusLabel.text = status
     }
-    
-    //MARK: BluetoothSerialDelegate
-    
-    func serialDidReceiveString(_ message: String) {
-        reloadUI()
-        // add the received text to the textView, optionally with a line break at the end
-        print(message)
+}
+
+extension String {
+
+    var length: Int {
+        return count
     }
-    
-    func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        reloadUI()
+
+    subscript (i: Int) -> String {
+        return self[i ..< i + 1]
     }
-    
-    func serialDidChangeState() {
-        reloadUI()
+
+    func substring(fromIndex: Int) -> String {
+        return self[min(fromIndex, length) ..< length]
+    }
+
+    func substring(toIndex: Int) -> String {
+        return self[0 ..< max(0, toIndex)]
+    }
+
+    subscript (r: Range<Int>) -> String {
+        let range = Range(uncheckedBounds: (lower: max(0, min(length, r.lowerBound)),
+                                            upper: min(length, max(0, r.upperBound))))
+        let start = index(startIndex, offsetBy: range.lowerBound)
+        let end = index(start, offsetBy: range.upperBound - range.lowerBound)
+        return String(self[start ..< end])
     }
 }

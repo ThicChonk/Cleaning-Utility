@@ -49,9 +49,14 @@ class DeviceScannerViewController: UIViewController {
             return
         }
         
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         startScanning()
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(DeviceScannerViewController.scanTimeOut), userInfo: nil, repeats: false)
-        
     }
     
     override func didReceiveMemoryWarning() {
