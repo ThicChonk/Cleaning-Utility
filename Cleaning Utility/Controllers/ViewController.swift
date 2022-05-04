@@ -87,6 +87,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     func disconnectPeripheral() {
         print("Disconnect for peripheral.")
+        serial.disconnect()
     }
     
     func writeCharacteristic(incomingValue: Int8){
@@ -160,12 +161,12 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         } else if serial.centralManager.state == .poweredOn {
             startCycleButton.tintColor = .systemGray
             connectionLabel.text = ""
-            statusLabel.text = "Not Connected"
+            status = "Not Connected"
             connectButton.setTitle("Connect", for: .normal)
         } else {
             startCycleButton.tintColor = .systemGray
             connectionLabel.text = ""
-            statusLabel.text = "Not Connected"
+            status = "Not Connected"
             connectButton.setTitle("Connect", for: .normal)
         }
         

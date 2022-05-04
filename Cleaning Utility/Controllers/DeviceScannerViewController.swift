@@ -49,14 +49,9 @@ class DeviceScannerViewController: UIViewController {
             return
         }
         
-        
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         startScanning()
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(DeviceScannerViewController.scanTimeOut), userInfo: nil, repeats: false)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -80,6 +75,8 @@ class DeviceScannerViewController: UIViewController {
         // timeout has occurred, stop scanning and give the user the option to try again
         serial.stopScan()
         scanningButton.isEnabled = true
+        scanningLabel.text = "Timed out"
+
     }
     
     func connectToDevice() -> Void {
