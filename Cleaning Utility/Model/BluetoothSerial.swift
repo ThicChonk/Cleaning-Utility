@@ -80,12 +80,13 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     
     /// The characteristic 0xFFE1 we need to write to, of the connectedPeripheral
     weak var writeCharacteristic: CBCharacteristic?
-    
+        
     /// Whether this serial is ready to send and receive data
     var isReady: Bool {
         get {
             return centralManager.state == .poweredOn &&
             connectedPeripheral != nil &&
+            BlePeripheral.connectedPeripheral != nil &&
             writeCharacteristic != nil
         }
     }
@@ -189,15 +190,23 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     
     // MARK: CBCentralManagerDelegate functions
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("Function: \(#function),Line: \(#line)")
+        BlePeripheral.connectedPeripheral = peripheral
+        connectedPeripheral = BlePeripheral.connectedPeripheral
+        
+        
         // just send it to the delegate
         delegate.serialDidDiscoverPeripheral(peripheral, RSSI: RSSI)
+        
+        
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         // set some stuff right
         peripheral.delegate = self
         pendingPeripheral = nil
-        connectedPeripheral = peripheral
+        BlePeripheral.connectedPeripheral = peripheral
+        connectedPeripheral = BlePeripheral.connectedPeripheral
         
         // send it to the delegate
         delegate.serialDidConnect(peripheral)
@@ -213,6 +222,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
+        BlePeripheral.connectedPeripheral = nil
         pendingPeripheral = nil
         
         // send it to the delegate
@@ -229,6 +239,7 @@ final class BluetoothSerial: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // note that "didDisconnectPeripheral" won't be called if BLE is turned off while connected
         connectedPeripheral = nil
+        BlePeripheral.connectedPeripheral = nil
         pendingPeripheral = nil
         
         // send it to the delegate

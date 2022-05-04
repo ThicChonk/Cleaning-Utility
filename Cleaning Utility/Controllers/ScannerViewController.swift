@@ -10,6 +10,12 @@ import CoreBluetooth
 
 class ScannerViewController: UIViewController {
     
+    /// The peripherals that have been discovered (no duplicates and sorted by asc RSSI)
+    var peripherals: [(peripheral: CBPeripheral, RSSI: Float)] = []
+    
+    /// The peripheral the user has selected
+    var selectedPeripheral: CBPeripheral?
+    
     // Data
     private var centralManager: CBCentralManager!
     private var bluefruitPeripheral: CBPeripheral!

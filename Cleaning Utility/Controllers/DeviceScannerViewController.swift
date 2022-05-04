@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 import CoreBluetooth
 
-class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
+class DeviceScannerViewController: UIViewController {
+    
     
     /// The peripherals that have been discovered (no duplicates and sorted by asc RSSI)
     var peripherals: [(peripheral: CBPeripheral, RSSI: Float)] = []
@@ -17,14 +18,8 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
     /// The peripheral the user has selected
     var selectedPeripheral: CBPeripheral?
     
-    // Data
-    private var centralManager: CBCentralManager!
-    private var bluefruitPeripheral: CBPeripheral!
-    private var txCharacteristic: CBCharacteristic!
-    private var rxCharacteristic: CBCharacteristic!
-    private var peripheralArray: [CBPeripheral] = []
-    private var rssiArray = [NSNumber]()
     private var timer = Timer()
+    
     
     // UI
     @IBOutlet weak var tableView: UITableView!
@@ -33,11 +28,15 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
     @IBOutlet weak var scanningButton: UIButton!
     
     @IBAction func scanningAction(_ sender: Any) {
+        peripherals = []
         startScanning()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        scanningButton.isEnabled = false
+        
         //init
         serial.delegate = self
         
@@ -45,18 +44,43 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
         self.tableView.dataSource = self
         self.tableView.reloadData()
         
-        //startScanning()
+        if serial.centralManager.state != .poweredOn {
+            title = "Bluetooth not turned on"
+            return
+        }
+        
+        startScanning()
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(DeviceScannerViewController.scanTimeOut), userInfo: nil, repeats: false)
+        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        serial.disconnect()
-        self.tableView.reloadData()
-        //startScanning()
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
+    @objc func connectTimeOut() {
+        // don't if we've already connected
+        if let _ = serial.connectedPeripheral {
+            return
+        }
+        
+        if let _ = selectedPeripheral {
+            serial.disconnect()
+            selectedPeripheral = nil
+        }
+    }
+    
+    @objc func scanTimeOut() {
+        // timeout has occurred, stop scanning and give the user the option to try again
+        serial.stopScan()
+        scanningButton.isEnabled = true
+    }
     
     func connectToDevice() -> Void {
-        serial.connectToPeripheral(bluefruitPeripheral)
+        serial.stopScan()
+        scanningButton.isEnabled = true
+        serial.connectToPeripheral(selectedPeripheral!)
     }
     
     func disconnectFromDevice() {
@@ -64,20 +88,18 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
     }
     
     func removeArrayData() -> Void {
-        serial.centralManager.cancelPeripheralConnection(bluefruitPeripheral)
-        rssiArray.removeAll()
-        peripheralArray.removeAll()
+        serial.centralManager.cancelPeripheralConnection(selectedPeripheral!)
+        peripherals.removeAll()
     }
     
     func startScanning() -> Void {
         // Remove prior data
-        peripheralArray.removeAll()
-        rssiArray.removeAll()
+        peripherals = []
         // Start Scanning
         serial.startScan()
         scanningLabel.text = "Scanning..."
         scanningButton.isEnabled = false
-        Timer.scheduledTimer(withTimeInterval: 15, repeats: false) {_ in self.stopScanning() }
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(DeviceScannerViewController.scanTimeOut), userInfo: nil, repeats: false)
     }
     
     func stopTimer() -> Void {
@@ -101,8 +123,56 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
             self.dismiss(animated: true, completion: nil)
         })
     }
+}
+
+// MARK: - UITableViewDataSource
+// The methods adopted by the object you use to manage data and provide cells for a table view.
+extension DeviceScannerViewController: UITableViewDataSource {
     
-    // MARK: - BluetoothSerialDelegate
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return peripherals.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BlueCell") as! TableViewCell
+        
+        let peripheralFound = self.peripherals[indexPath.row].peripheral
+        
+        let rssiFound = self.peripherals[indexPath.row].RSSI
+        
+        if peripheralFound == nil {
+            cell.peripheralLabel.text = "Unknown"
+        }else {
+            cell.peripheralLabel.text = peripheralFound.name
+            cell.rssiLabel.text = "RSSI: \(rssiFound)"
+        }
+        return cell
+    }
+}
+
+
+// MARK: - UITableViewDelegate
+// Methods for managing selections, deleting and reordering cells and performing other actions in a table view.
+extension DeviceScannerViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        // the user has selected a peripheral, so stop scanning and proceed to the next view
+        serial.stopScan()
+        selectedPeripheral = peripherals[(indexPath as NSIndexPath).row].peripheral
+        serial.connectToPeripheral(selectedPeripheral!)
+        connectToDevice()
+        // TODO: Timer doesn't use connecting ID
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(DeviceScannerViewController.connectTimeOut), userInfo: nil, repeats: false)
+        
+    }
+}
+
+// MARK: - BluetoothSerialDelegate
+extension DeviceScannerViewController: BluetoothSerialDelegate {
     func serialDidChangeState() {
         switch serial.centralManager.state {
         case .poweredOff:
@@ -136,49 +206,32 @@ class DeviceScannerViewController: UIViewController, BluetoothSerialDelegate {
     
     func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         print("Disconnected from: " + (peripheral.name ?? "Null"))
-    }
-}
-
-// MARK: - UITableViewDataSource
-// The methods adopted by the object you use to manage data and provide cells for a table view.
-extension DeviceScannerViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.peripheralArray.count
+        
+        scanningButton.isEnabled = true
     }
     
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BlueCell") as! TableViewCell
-        
-        let peripheralFound = self.peripheralArray[indexPath.row]
-        
-        let rssiFound = self.rssiArray[indexPath.row]
-        
-        if peripheralFound == nil {
-            cell.peripheralLabel.text = "Unknown"
-        }else {
-            cell.peripheralLabel.text = peripheralFound.name
-            cell.rssiLabel.text = "RSSI: \(rssiFound)"
+    func serialDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
+        // check whether it is a duplicate
+        for exisiting in peripherals {
+            if exisiting.peripheral.identifier == peripheral.identifier { return }
         }
-        return cell
+        
+        // add to the array, next sort & reload
+        let theRSSI = RSSI?.floatValue ?? 0.0
+        peripherals.append((peripheral: peripheral, RSSI: theRSSI))
+        print("Peripheral Discovered: \(peripheral)")
+        peripherals.sort { $0.RSSI < $1.RSSI }
+        tableView.reloadData()
     }
     
+    func serialDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
+        scanningButton.isEnabled = true
+    }
     
-}
-
-
-// MARK: - UITableViewDelegate
-// Methods for managing selections, deleting and reordering cells and performing other actions in a table view.
-extension DeviceScannerViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func serialIsReady(_ peripheral: CBPeripheral) {
         
-        bluefruitPeripheral = peripheralArray[indexPath.row]
-        
-        BlePeripheral.connectedPeripheral = bluefruitPeripheral
-        
-        connectToDevice()
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadStartViewController"), object: self)
+        dismiss(animated: true, completion: nil)
     }
 }
+
