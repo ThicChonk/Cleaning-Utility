@@ -54,25 +54,25 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
             let alert = UIAlertController(title: "Not connected", message: "What am I supposed to send this to?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: { action -> Void in self.dismiss(animated: true, completion: nil) }))
             present(alert, animated: true, completion: nil)
-        } else {
+        } else if !isRunning {
             print("Serial is connected and sending message!")
             serial.sendMessageToDevice("1")
             print("Sent \"1\"")
             progress = 0.0
             isRunning = true
+            status = "Starting..."
         }
         
         reloadUI()
     }
     
     @IBAction func connectButtonToggled(_ sender: UIButton) {
+        reloadUI()
         if(!serial.isReady) {
             self.performSegue(withIdentifier: "goToDevices", sender: self)
         } else {
             disconnectPeripheral()
         }
-        
-        reloadUI()
     }
     
     func writeOutgoingValue(data: String){
@@ -88,6 +88,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     func disconnectPeripheral() {
         print("Disconnect for peripheral.")
         serial.disconnect()
+        reloadUI()
     }
     
     func writeCharacteristic(incomingValue: Int8){
@@ -110,6 +111,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         
         switch switchstate {
         case "p":
+            status = "Running"
             let value = Float(message[1..<4])
             progress = value!
             
@@ -123,6 +125,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         case "d":
             progress = 1.0
             isRunning = false
+            print("done!")
         default:
             print("Invalid command given")
             progress = 0.0
@@ -148,14 +151,17 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         serial.delegate = self
         
         if(isRunning) {
-            status = "Running"
+            startCycleButton.isPointerInteractionEnabled = false
             startCycleButton.tintColor = .systemGreen
-        } else { status = "Idle" }
+        } else {
+            status = "Idle"
+            startCycleButton.isPointerInteractionEnabled = true
+            startCycleButton.tintColor = .systemBlue
+        }
         
         if serial.isReady {
             connectionLabel.text = "Connected To: " + BlePeripheral.connectedPeripheral!.name!
             statusLabel.text = ""
-            startCycleButton.tintColor = .systemBlue
             connectButton.tintColor = .systemRed
             connectButton.setTitle("Disconnect", for: .normal)
         } else if serial.centralManager.state == .poweredOn {
@@ -200,3 +206,4 @@ extension String {
         return String(self[start ..< end])
     }
 }
+
